@@ -1,0 +1,33 @@
+ pipeline {
+        agent any 
+         tools { 
+        maven 'Maven 3.3.9' 
+        jdk 'jdk8' 
+    }
+
+        stages {
+            stage ('Clone') {
+            steps {
+                git branch: 'master', url: "https://github.com/spring-projects/spring-petclinic"
+            }
+            }
+          stage("SonarQube analysis") {
+            agent any
+            steps {
+              withSonarQubeEnv('My SonarQube Server') {
+                sh 'mvn clean package sonar:sonar'
+              }
+            }
+          }
+           stage ('Build') {
+            steps {
+                sh 'mvn -Dmaven.test.failure.ignore=true install' 
+            }
+            post {
+                success {
+                    junit 'target/surefire-reports/**/*.xml' 
+                }
+            }
+        }
+        }
+ }
