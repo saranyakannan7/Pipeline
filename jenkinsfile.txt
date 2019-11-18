@@ -2,6 +2,7 @@
         agent any 
          tools { 
         maven 'maven' 
+        Sonar 'Sonar'
     }
 
         stages {
@@ -19,6 +20,15 @@
                }
             }
           }
+          stage("Quality Gate") {
+            steps {
+                timeout(time: 1, unit: 'HOURS') {
+                    // Parameter indicates whether to set pipeline to UNSTABLE if Quality Gate fails
+                    // true = set pipeline to UNSTABLE, false = don't
+                    waitForQualityGate abortPipeline: true
+                }
+            }
+        }
            stage ('Build') {
             steps {
                 sh 'mvn -Dmaven.test.failure.ignore=true install' 
