@@ -14,9 +14,9 @@
           stage("SonarQube analysis") {
             steps {
               withSonarQubeEnv('Sonar') {
-              withMaven(maven:'maven') {
+              
                         sh 'mvn clean package sonar:sonar'
-                    }
+                    
                }
             }
           }
