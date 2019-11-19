@@ -13,7 +13,7 @@
             }
           stage("SonarQube analysis") {
             steps {
-            def scannerHome = tool 'SonarScanner 4.0';
+           // def scannerHome = tool 'SonarScanner 4.0';
               withSonarQubeEnv('Sonar') {
               
                        bat 'mvn clean package sonar:sonar'
